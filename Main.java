@@ -4,6 +4,9 @@ import br.com.trab1pc2.produto.*;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Main {
 	private static Scanner inT = new Scanner(System.in);
 	private static Scanner inN = new Scanner(System.in);
@@ -518,11 +521,11 @@ public class Main {
 	
 	private static void listarItens(Pedido pedido) {
 		if (pedido != null) {
-			Item[] itens = sis.listarItens(pedido);
+			List<Item> itens = sis.listarItens(pedido);
 			
 			System.out.printf("\n<--> Lista de Itens: <-->\n");
-			for (int i = 0; i < itens.length; i++) {
-				System.out.printf("Produto: %s\nPreço: R$%.2f\nQuantidade: %d\n\n", itens[i].getProduto().getNome(), itens[i].getPreco(), itens[i].getQtd());
+			for (int i = 0; i < itens.size(); i++) {
+				System.out.printf("Produto: %s\nPreço: R$%.2f\nQuantidade: %d\n\n", itens.get(i).getProduto().getNome(), itens.get(i).getPreco(), itens.get(i).getQtd());
 			}
 			System.out.printf("\n<--> -------------- <-->\n");
 			
@@ -532,11 +535,11 @@ public class Main {
 	}
 	
 	private static void listarProdutos() {
-		Produto[] produtos = sis.listarProdutos();
+		List<Produto> produtos = sis.listarProdutos();
 		
 		System.out.printf("\n<--> Lista de Produtos: <-->\n");
-		for (int i = 0; i < produtos.length; i++) {
-			System.out.printf("ID: %d\nNome: %s\nDescrição: %s\nPreço: R$%.2f\nQuantidade em estoque: %d\n\n", produtos[i].getId(), produtos[i].getNome(), produtos[i].getDescricao(), produtos[i].getPreco(), produtos[i].getQtdEstoque());
+		for (int i = 0; i < produtos.size(); i++) {
+			System.out.printf("ID: %d\nNome: %s\nDescrição: %s\nPreço: R$%.2f\nQuantidade em estoque: %d\n\n", produtos.get(i).getId(), produtos.get(i).getNome(), produtos.get(i).getDescricao(), produtos.get(i).getPreco(), produtos.get(i).getQtdEstoque());
 		}
 		System.out.printf("\n<--> -------------- <-->\n");
 	}
@@ -570,13 +573,13 @@ public class Main {
 	}
 	
 	private static void listarVendas() {
-		Venda[] vendas = sis.listarVendas();
+		List<Venda> vendas = sis.listarVendas();
 		
 		System.out.printf("\n<--> Lista de Vendas: <-->\n");
-		for (int i = 0; i < vendas.length; i++) {
-			System.out.printf("ID: %d\nPedido: \n", vendas[i].getId());
-			listarProdutosVenda(vendas[i]);
-			System.out.printf("\nPreço total: R$%.2f\nCliente: %s\nData: %s\n\n", vendas[i].getPedido().getPrecoTotal(), vendas[i].getCliente(), formato.format(vendas[i].getData()));
+		for (int i = 0; i < vendas.size(); i++) {
+			System.out.printf("ID: %d\nPedido: \n", vendas.get(i).getId());
+			listarProdutosVenda(vendas.get(i));
+			System.out.printf("\nPreço total: R$%.2f\nCliente: %s\nData: %s\n\n", vendas.get(i).getPedido().getPrecoTotal(), vendas.get(i).getCliente(), formato.format(vendas.get(i).getData()));
 		}
 		System.out.printf("\n<--> -------------- <-->\n");
 	}
@@ -587,12 +590,12 @@ public class Main {
 		String data = inT.nextLine();
 		
 		if (data != null && (data.length() >= 8 && data.length() <= 10)) {
-			Venda[] vendas = sis.listarVendasDia(data);
+			List<Venda> vendas = sis.listarVendasDia(data);
 			System.out.printf("\n<--> Lista de Vendas do dia %s: <-->\n", data);
-			for (int i = 0; i < vendas.length; i++) {
-				System.out.printf("ID: %d\nPedido: \n", vendas[i].getId());
-				listarProdutosVenda(vendas[i]);
-				System.out.printf("\nPreço total: R$%.2f\nCliente: %s\nData: %s\n\n", vendas[i].getPedido().getPrecoTotal(), vendas[i].getCliente(), formato.format(vendas[i].getData()));
+			for (int i = 0; i < vendas.size(); i++) {
+				System.out.printf("ID: %d\nPedido: \n", vendas.get(i).getId());
+				listarProdutosVenda(vendas.get(i));
+				System.out.printf("\nPreço total: R$%.2f\nCliente: %s\nData: %s\n\n", vendas.get(i).getPedido().getPrecoTotal(), vendas.get(i).getCliente(), formato.format(vendas.get(i).getData()));
 			}
 			System.out.printf("\n<--> -------------- <-->\n");
 			
@@ -621,12 +624,12 @@ public class Main {
 	}
 	
 	private static void listarProdutosVenda(Venda venda) {
-		Item[] itens = sis.listarProdutosVenda(venda);
+		List<Item> itens = sis.listarProdutosVenda(venda);
 		
 		if (itens != null) {
 			System.out.printf("\n   ID  Nome     Preço    Quantidade\n");
-			for (int i = 0; i < itens.length; i++) {
-				System.out.printf("   %d   %s      R$%.2f     %d\n", itens[i].getProduto().getId(), itens[i].getProduto().getNome(), itens[i].getPreco(), itens[i].getQtd());
+			for (int i = 0; i < itens.size(); i++) {
+				System.out.printf("   %d   %s      R$%.2f     %d\n", itens.get(i).getProduto().getId(), itens.get(i).getProduto().getNome(), itens.get(i).getPreco(), itens.get(i).getQtd());
 			}
 		}
 	}
@@ -636,14 +639,14 @@ public class Main {
 		System.out.printf("\nNome do cliente: ");
 		String cliente = inT.nextLine();
 		
-		Venda[] vendas = sis.listarVendasCliente(cliente);
+		List<Venda> vendas = sis.listarVendasCliente(cliente);
 		
 		if (vendas != null) {
-			for (int i = 0; i < vendas.length; i++) {
+			for (int i = 0; i < vendas.size(); i++) {
 				System.out.printf("\n-----ID   Data");
-				System.out.printf("\n     %d   %s", vendas[i].getId(), formato.format(vendas[i].getData()));
+				System.out.printf("\n     %d   %s", vendas.get(i).getId(), formato.format(vendas.get(i).getData()));
 				System.out.println("\n-----Produtos: ");
-				listarProdutosVenda(vendas[i]);
+				listarProdutosVenda(vendas.get(i));
 				
 				System.out.printf("\n<--> -------------- <-->\n");
 			}

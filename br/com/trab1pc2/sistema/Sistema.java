@@ -8,20 +8,19 @@ import br.com.trab1pc2.produto.Item;
 import br.com.trab1pc2.produto.Pedido;
 import br.com.trab1pc2.produto.Produto;
 
+import java.util.List;
+import java.util.ArrayList;
+
 // Sistema será um singleton
 public class Sistema {
-	private Produto produtos[];
-	private Venda vendas[];
-	private static int numProdutos = 0;
-	private static int numVendas = 0;
+	private List<Produto> produtos = new ArrayList<Produto>();
+	private List<Venda> vendas = new ArrayList<Venda>();
 	private static Sistema s = new Sistema();
 	private static SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
 	// Contrutor
 
 	private Sistema() {
-		produtos = new Produto[1];
-		vendas = new Venda[1];
 	}
 
 	public static Sistema getInstance() {
@@ -32,12 +31,8 @@ public class Sistema {
 
 	public boolean inserirProduto(Produto produto) {
 		if (produto != null && !existeNome(produto)) {
-			if (numProdutos >= produtos.length) {
-				produtos = extendeVetor(produtos);
-			}
 
-			produtos[numProdutos] = produto;
-			numProdutos++;
+			produtos.add(produto);
 
 			return true;
 		} else {
@@ -68,16 +63,13 @@ public class Sistema {
 	public boolean existeNome(Produto produto) {
 		if (produto != null) {
 			boolean existe = false;
-			for (int i = 0; i < numProdutos; i++) {
-				if (produtos[i].getNome().equalsIgnoreCase(produto.getNome())) {
-					existe = true;
-					break;
-				} else if (i == numProdutos - 1) {
-					existe = false;
+			for (int i = 0; i < produtos.size(); i++) {
+				if (produtos.get(i).getNome().equalsIgnoreCase(produto.getNome())) {
+					return true;
 				}
 			}
 
-			return existe;
+      return false;
 		} else {
 			return false;
 		}
@@ -86,16 +78,13 @@ public class Sistema {
 	public boolean existeIDProduto(long id) {
 		if (id > 0) {
 			boolean existe = false;
-			for (int i = 0; i < numProdutos; i++) {
-				if (produtos[i].getId() == id) {
-					existe = true;
-					break;
-				} else if (i == numProdutos - 1) {
-					existe = false;
+			for (int i = 0; i < produtos.size(); i++) {
+				if (produtos.get(i).getId() == id) {
+					return true;
 				}
 			}
 
-			return existe;
+			return false;
 		} else {
 			return false;
 		}
@@ -103,12 +92,8 @@ public class Sistema {
 
 	public boolean inserirVenda(Venda venda) {
 		if (venda != null) {
-			if (numVendas >= vendas.length) {
-				vendas = extendeVetor(vendas);
-			}
 
-			vendas[numVendas] = venda;
-			numVendas++;
+			vendas.add(venda);
 
 			return true;
 		} else {
@@ -116,38 +101,38 @@ public class Sistema {
 		}
 	}
 
-	private Produto[] extendeVetor(Produto[] produtos) { // extende o vetor produtos[] em +1
-		if (numProdutos >= produtos.length) {
-			Produto[] aux = new Produto[produtos.length + 1];
-			for (int i = 0; i < produtos.length; i++) {
-				aux[i] = produtos[i];
-			}
+//	private Produto[] extendeVetor(Produto[] produtos) { // extende o vetor produtos[] em +1
+//		if (numProdutos >= produtos.length) {
+//			Produto[] aux = new Produto[produtos.length + 1];
+//			for (int i = 0; i < produtos.length; i++) {
+//				aux[i] = produtos[i];
+//			}
+//
+//			return aux;
+//		} else {
+//			return produtos;
+//		}
+//	}
 
-			return aux;
-		} else {
-			return produtos;
-		}
-	}
+//	private Venda[] extendeVetor(Venda[] vendas) { // extende o vetor vendas[] em +1
+//		if (numVendas >= vendas.length) {
+//			Venda[] aux = new Venda[vendas.length + 1];
+//			for (int i = 0; i < vendas.length; i++) {
+//				aux[i] = vendas[i];
+//			}
+//
+//			return aux;
+//		} else {
+//			return vendas;
+//		}
+//	}
 
-	private Venda[] extendeVetor(Venda[] vendas) { // extende o vetor vendas[] em +1
-		if (numVendas >= vendas.length) {
-			Venda[] aux = new Venda[vendas.length + 1];
-			for (int i = 0; i < vendas.length; i++) {
-				aux[i] = vendas[i];
-			}
+	public List<Produto> listarProdutos() { // Listar todos os produtos (retorna um vetor produtos[] de Produto)
+		List<Produto> produtos = new ArrayList<Produto>();
 
-			return aux;
-		} else {
-			return vendas;
-		}
-	}
-
-	public Produto[] listarProdutos() { // Listar todos os produtos (retorna um vetor produtos[] de Produto)
-		Produto[] produtos = new Produto[numProdutos];
-
-		for (int i = 0; i < produtos.length; i++) {
-			if (!this.produtos[i].getExcluido()) {
-				produtos[i] = this.produtos[i];
+		for (int i = 0; i < this.produtos.size(); i++) {
+			if (!this.produtos.get(i).getExcluido()) {
+				produtos.add(this.produtos.get(i));
 			}
 
 		}
@@ -157,28 +142,28 @@ public class Sistema {
 
 	public Venda ultimaVenda() { // Listar todas as vendas (retorna um vetor vendas[] de Venda)
 		Venda venda = null;
-
-		venda = vendas[numVendas-1];
+    int ult = vendas.size();
+		venda = vendas.get(ult);
 
 		return venda;
 	}
 	
-	public Venda[] listarVendas() { // Listar todas as vendas (retorna um vetor vendas[] de Venda)
-		Venda[] vendas = new Venda[numVendas];
+	public List<Venda> listarVendas() { // Listar todas as vendas (retorna um vetor vendas[] de Venda)
+		List<Venda> vendas = new ArrayList<Venda>();
 
-		for (int i = 0; i < vendas.length; i++) {
-			vendas[i] = this.vendas[i];
+		for (int i = 0; i < vendas.size(); i++) {
+			vendas.add(this.vendas.get(i));
 		}
 
 		return vendas;
 	}
 
-	public Item[] listarProdutosVenda(Venda venda) {
+	public List<Item> listarProdutosVenda(Venda venda) {
 		if (venda != null) {
-			Item[] itens = new Item[venda.getPedido().getItens().length];
+			List<Item> itens = new ArrayList<Item>();
 
-			for (int i = 0; i < venda.getPedido().getItens().length; i++) {
-				itens[i] = venda.getPedido().getItens()[i];
+			for (int i = 0; i < venda.getPedido().getItens().size(); i++) {
+				itens.add(i, venda.getPedido().getItens().get(i));
 			}
 
 			return itens;
@@ -187,9 +172,7 @@ public class Sistema {
 		}
 	}
 
-	public Venda[] listarVendasDia(String data) { // Listar todas as vendas no dia (retorna um vetor vendas[] de Venda)
-		int cont = 0;
-		Venda[] vendas = null;
+	public List<Venda> listarVendasDia(String data) { // Listar todas as vendas no dia (retorna um vetor vendas[] de Venda)
 
 		Date dataFormatada = null;
 		try {
@@ -199,18 +182,11 @@ public class Sistema {
 		}
 
 		if (dataFormatada != null) {
-			cont = 0;
-			for (int i = 0; i < this.vendas.length; i++) {
-				if (this.vendas[i].getData().equals(dataFormatada)) {
-					cont++;
-				}
-			}
-			vendas = new Venda[cont];
-			int j = 0;
-			for (int i = 0; i < this.vendas.length; i++) {
-				if (this.vendas[i].getData().equals(dataFormatada)) {
-					vendas[j] = this.vendas[i];
-					j++;
+			List<Venda> vendas = new ArrayList<Venda>();
+			
+			for (int i = 0; i < this.vendas.size(); i++) {
+				if (this.vendas.get(i).getData().equals(dataFormatada)) {
+					vendas.add(this.vendas.get(i));
 				}
 			}
 		}
@@ -218,26 +194,13 @@ public class Sistema {
 		return vendas;
 	}
 
-	public Venda[] listarVendasCliente(String cliente) { // Listar todas as vendas de um cliente (retorna um vetor vendas[] de Venda)
+	public List<Venda> listarVendasCliente(String cliente) { // Listar todas as vendas de um cliente (retorna um vetor vendas[] de Venda)
 		if (cliente != null && cliente.length() >= 2) {
-		
-			int cont = 0;
-			Venda[] vendas = null;
+			List<Venda> vendas = new ArrayList<Venda>();
 			
-			cont = 0;
-			for (int i = 0; i < this.vendas.length; i++) {
-				if (this.vendas[i].getCliente().equalsIgnoreCase(cliente)) {
-					cont++;
-				}
-			}
-			
-			vendas = new Venda[cont];
-			int j = 0;
-			
-			for (int i = 0; i < this.vendas.length; i++) {
-				if (this.vendas[i].getCliente().equalsIgnoreCase(cliente)) {
-					vendas[j] = this.vendas[i];
-					j++;
+			for (int i = 0; i < this.vendas.size(); i++) {
+				if (this.vendas.get(i).getCliente().equalsIgnoreCase(cliente)) {
+					vendas.add(this.vendas.get(i));
 				}
 			}
 	
@@ -249,22 +212,15 @@ public class Sistema {
 	}
 
 	public Venda buscarVendaID(long id) {
-		if (id > 0 && numVendas > 0) {
+		if (id > 0 && vendas.size() > 0) {
 			int j = 0;
-			for (int i = 0; i < numVendas; i++) {
-				if (vendas[i].getId() == id) {
-					j = i;
-					break;
-				} else if (i == numVendas - 1) {
-					j = -1;
+			for (int i = 0; i < vendas.size(); i++) {
+				if (vendas.get(i).getId() == id) {
+					return vendas.get(i);
 				}
 			}
 
-			if (j != -1) {
-				return vendas[j];
-			} else {
-				return null;
-			}
+			return null;
 		} else {
 			return null;
 		}
@@ -272,11 +228,11 @@ public class Sistema {
 
 	public boolean buscarProdutoVenda(Produto produto) {
 		if (produto != null && existeIDProduto(produto.getId())) {
-			for (int i = 0; i < vendas.length; i++) {
-				Item[] itens = listarProdutosVenda(vendas[i]);
+			for (int i = 0; i < vendas.size(); i++) {
+				List<Item> itens = listarProdutosVenda(vendas.get(i));
 
-				for (int j = 0; j < itens.length; j++) {
-					if (itens[j].getProduto().getId() == produto.getId()) {
+				for (int j = 0; j < itens.size(); j++) {
+					if (itens.get(j).getProduto().getId() == produto.getId()) {
 						return true;
 					}
 				}
@@ -311,9 +267,9 @@ public class Sistema {
 		if (venda != null) {
 			if (inserirVenda(venda)) {
 				Produto produto;
-				for (int i = 0; i < venda.getPedido().getItens().length; i++) {
-					produto = buscarProduto(venda.getPedido().getItens()[i].getProduto().getId());
-					if (produto.alterarEstoque(venda.getPedido().getItens()[i].getQtd())) {
+				for (int i = 0; i < venda.getPedido().getItens().size(); i++) {
+					produto = buscarProduto(venda.getPedido().getItens().get(i).getProduto().getId());
+					if (produto.alterarEstoque(venda.getPedido().getItens().get(i).getQtd())) {
 						excluirVenda(venda.getId());
 						return false;
 					}
@@ -329,7 +285,7 @@ public class Sistema {
 		}
 	}
 
-	public Item[] listarItens(Pedido pedido) {
+	public List<Item> listarItens(Pedido pedido) {
 		if (pedido != null) {
 			return pedido.getItens();
 		} else {
@@ -340,20 +296,13 @@ public class Sistema {
 	public Produto buscarProduto(long id) {
 		if (id > 0) {
 			int j = 0;
-			for (int i = 0; i < numProdutos; i++) {
-				if (produtos[i].getId() == id) {
-					j = i;
-					break;
-				} else if (i == numProdutos - 1) {
-					j = -1;
+			for (int i = 0; i < produtos.size(); i++) {
+				if (produtos.get(i).getId() == id) {
+					return produtos.get(i);
 				}
 			}
 
-			if (j != -1) {
-				return produtos[j];
-			} else {
-				return null;
-			}
+			return null;
 		} else {
 			return null;
 		}
@@ -361,21 +310,14 @@ public class Sistema {
 
 	public Produto buscarProdutoNome(String nome) {
 		if (nome != null && nome.length() >= 2) {
-			int j = 0;
-			for (int i = 0; i < numProdutos; i++) {
-				if (produtos[i].getNome().equalsIgnoreCase(nome)) {
-					j = i;
-					break;
-				} else if (i == numProdutos - 1) {
-					j = -1;
+
+			for (int i = 0; i < produtos.size(); i++) {
+				if (produtos.get(i).getNome().equalsIgnoreCase(nome)) {
+					return produtos.get(i);
 				}
 			}
 
-			if (j != -1) {
-				return produtos[j];
-			} else {
-				return null;
-			}
+			return null;
 		} else {
 			return null;
 		}
@@ -383,120 +325,61 @@ public class Sistema {
 
 	private boolean substituirProduto(long id, Produto produto) {
 		if (id > 0 && produto != null) {
-			int j = 0;
-			for (int i = 0; i < numProdutos; i++) {
-				if (produtos[i].getId() == id) {
-					j = i;
-					break;
-				} else if (i == numProdutos - 1) {
-					j = -1;
+
+			for (int i = 0; i < produtos.size(); i++) {
+				if (produtos.get(i).getId() == id) {
+          produtos.remove(i);
+					produtos.add(i, produto);
+          return true;
 				}
 			}
+    }
 
-			if (j != -1) {
-				produtos[j] = produto;
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+    return false;
 	}
 
 	public boolean excluirProduto(int id) {
 		if (id > 0) {
-			int j = 0;
-			boolean existe = false;
-			for (int i = 0; i < produtos.length; i++) {
-				if (produtos[i].getId() != id) {
-					j++;
-				} else {
-					if (buscarProdutoVenda(buscarProduto(id))) {
-						produtos[i].excluir();
-					}
-					existe = true;
-				}
-			}
 
-			Produto[] produtosAux = new Produto[j];
+      for (int i = 0; i < produtos.size(); i++) {
+        if (produtos.get(i).getId() == id) {
+          produtos.remove(i);
+          return true;
+        }
+      }
 
-			int index = 0;
+    }
 
-			for (int i = 0; i < produtos.length; i++) {
-				if (produtos[i].getId() != id) {
-					produtosAux[index] = produtos[i];
-					index++;
-				}
-			}
-
-			if (existe) {
-				produtos = produtosAux;
-				numProdutos--;
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+    return false;
 	}
 
 	private boolean substituirVenda(long id, Venda venda) {
 		if (id > 0 && venda != null) {
-			int j = 0;
-			for (int i = 0; i < numVendas; i++) {
-				if (vendas[i].getId() == id) {
-					j = i;
-					break;
-				} else if (i == numVendas - 1) {
-					j = -1;
-				}
+
+			for (int i = 0; i < vendas.size(); i++) {
+				if (vendas.get(i).getId() == id) {
+          vendas.remove(i);
+          vendas.add(i, venda);
+          return true;
+        }
 			}
 
-			if (j != -1) {
-				vendas[j] = venda;
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
 		}
+
+    return false;
 	}
 
 	public boolean excluirVenda(long l) {
 		if (l > 0) {
-			int j = 0;
-			boolean existe = false;
-			for (int i = 0; i < vendas.length; i++) {
-				if (vendas[i].getId() != l) {
-					j++;
-				} else {
-					existe = true;
+			
+			for (int i = 0; i < vendas.size(); i++) {
+				if (vendas.get(i).getId() == l) {
+					vendas.remove(i);
+          return true;
 				}
-			}
+      }
+    }
 
-			Venda[] vendasAux = new Venda[j];
-
-			int index = 0;
-
-			for (int i = 0; i < vendas.length; i++) {
-				if (vendas[i].getId() != l) {
-					vendasAux[index] = vendas[i];
-					index++;
-				}
-			}
-
-			if (existe) {
-				vendas = vendasAux;
-				numVendas--;
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+    return false;
 	}
 }

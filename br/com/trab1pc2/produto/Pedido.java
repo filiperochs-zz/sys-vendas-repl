@@ -1,16 +1,16 @@
 package br.com.trab1pc2.produto;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Pedido {
-	private Item itens[];
+  private List<Item> itens = new ArrayList<Item>();
 	private double precoTotal;
-	private static int numItens=0;
 	
 	// Construtores
 	
 	private Pedido() {
-		itens = new Item[1];
 		precoTotal = 0;
-		numItens=0;
 	}
 	
 	public static Pedido getInstance() {
@@ -25,13 +25,9 @@ public class Pedido {
 			int index = existeItem(item);
 			
 			if (index != -1) {
-				itens[index].somarQtd(item.getQtd());
+				itens.get(index).somarQtd(item.getQtd());
 			} else {
-				if (numItens >= itens.length) {
-					itens = extendeVetor(itens);
-				}
-				itens[numItens] = item;
-				numItens++;
+				itens.add(item);
 			}
 			atualizarPrecoTotal(item.getPreco(), item.getQtd());
 			return true; // item inserido com sucesso
@@ -44,25 +40,25 @@ public class Pedido {
 		return (precoTotal += preco*qtd);
 	}
 	
-	private Item[] extendeVetor(Item[] itens) { // extende o vetor itens[] em +1
-		if (numItens >= itens.length) {
-			Item[] aux = new Item[itens.length+1];
-			for (int i = 0; i < itens.length; i++) {
-				aux[i] = itens[i];
-			}
-			
-			return aux;
-		} else {
-			return itens;
-		}
-	}
+//	private Item[] extendeVetor(Item[] itens) { // extende o vetor itens[] em +1
+//		if (numItens >= itens.length) {
+//			Item[] aux = new Item[itens.length+1];
+//			for (int i = 0; i < itens.length; i++) {
+//				aux[i] = itens[i];
+//			}
+//			
+//			return aux;
+//		} else {
+//			return itens;
+//		}
+//	}
 
 	// Métodos
 	
 	private int existeItem(Item item) {
 		if (item != null) {
-			for (int i = 0; i < numItens; i++) {
-				if (itens[i].getProduto().getId() == item.getProduto().getId()) {
+			for (int i = 0; i < itens.size(); i++) {
+				if (itens.get(i).getProduto().getId() == item.getProduto().getId()) {
 					return i;
 				}
 			}
@@ -78,7 +74,7 @@ public class Pedido {
 	/**
 	 * @return the itens
 	 */
-	public Item[] getItens() {
+	public List<Item> getItens() {
 		return itens;
 	}
 

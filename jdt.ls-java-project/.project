@@ -26,9 +26,29 @@
 			<location>//home/runner/br/com/trab1pc2/produto/ProdutoRefrigerado.java</location>
 		</link>
 		<link>
+			<name>src/br/com/trab1pc2/produto/Item.java</name>
+			<type>1</type>
+			<location>//home/runner/br/com/trab1pc2/produto/Item.java</location>
+		</link>
+		<link>
+			<name>src/br/com/trab1pc2/produto/Pedido.java</name>
+			<type>1</type>
+			<location>//home/runner/br/com/trab1pc2/produto/Pedido.java</location>
+		</link>
+		<link>
 			<name>src/br/com/trab1pc2/produto/Produto.java</name>
 			<type>1</type>
 			<location>//home/runner/br/com/trab1pc2/produto/Produto.java</location>
+		</link>
+		<link>
+			<name>src/br/com/trab1pc2/sistema/Sistema.java</name>
+			<type>1</type>
+			<location>//home/runner/br/com/trab1pc2/sistema/Sistema.java</location>
+		</link>
+		<link>
+			<name>src/br/com/trab1pc2/sistema/Venda.java</name>
+			<type>1</type>
+			<location>//home/runner/br/com/trab1pc2/sistema/Venda.java</location>
 		</link>
 	</linkedResources>
 </projectDescription>
